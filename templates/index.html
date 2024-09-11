@@ -2,27 +2,56 @@
 <html lang = "en">
 <head>
     <meta charset="UTF-8">
-    <title>Hello World!</title>
+    <title>MEDICAL!!MEDICAL!!MEDICAL</title>
 </head>
 
 <body>
     <header>
-        <h1>MTSU Center for Medical Database Management and Research</h1>
-        <aside>For Dr. Poudel CSCI4850</aside>
+        <h1>MTSU Center for Medical Database Management and Research (TM)</h1>
+        <aside>For Dr. Poudel CSCI4560</aside>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     </header>
-    <form>
-        <label for="name">Full name:</label><br>
-        <input type="text" id="name" name="name"><br>
-        <label>Gender:</label><br>
-        <input type="radio" id="male" name="gender" value="male">
-        <label for="male">Male</label><br>
-        <input type="radio" id="female" name="gender" value="female">
-        <label for="female">Female</label><br>
-        <input type="radio" id="other" name="gender" value="other">
-        <label for="other">Other</label><br>
-        <label for="height">Height:</label><br>
-        <input type="text" id="height" name="height"><br>
+    <p>
+        Please enter your information in order to determine which diseases you may be at risk for!
+    </p>
+    <form method="post">
+        <div>
+            <label for="name">Full name:</label><br>
+            <input type="text" id="name" name="name">
+        </div>
+        <div class="gender-select">
+            <label>Gender:</label><br>
+            <input type="radio" id="male" name="gender" value="male">
+            <label for="male">Male</label>
+            <input type="radio" id="female" name="gender" value="female">
+            <label for="female">Female</label>
+            <input type="radio" id="other" name="gender" value="other">
+            <label for="other">Other</label>
+        </div>
+        <div>
+            <label for="height">Height:</label><br>
+            <input type="text" id="height" name="height">
+        </div>
+        <div>
+            <label for="weight">Weight:</label><br>
+            <input type="text" id="weight" name="weight">
+        </div>
+        <div>
+            <label for="race">Race:</label><br>
+            <select id="race" name="race">
+                <option value="native">American Indian/Alaska Native</option>
+                <option value="asian">Asian</option>
+                <option value="black">Black or African American</option>
+                <option value="hawaiian">Native Hawaiian or Other Pacific Islander</option>
+                <option value="white">White</option>
+            </select>
+        </div>
+        <button type="submit">Submit</button>
     </form>
 </body>
+
+<footer>
+    <h2>Aaryan<br>Derek Credland<br>Ronald Montilla<br>William<br>Jake Salter<br></h2>
+</footer>
 
 </html>
