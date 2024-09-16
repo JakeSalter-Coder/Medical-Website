@@ -12,13 +12,14 @@ def index():
 @app.route('/', methods=['POST'])
 def index_post():
     name = request.form['name']
+    age = request.form['age']
     gender = request.form['gender']
     height = request.form['height']
     weight = request.form['weight']
     race = request.form['race']
-    string_input = (name + " " + gender + " " + height + " " + weight + " " + race)
-    print(string_input)
-    return string_input
+    user_input = name + " " + age + " " + gender + " " + height + " " + weight + " " + race
+    print(user_input)
+    return '/'
 
 
 @app.route("/quit")
@@ -27,4 +28,4 @@ def _quit():
 
 
 if __name__ == '__main__':
-    app.run(host='localhost', port=4560)
+    app.run(host='localhost', port=4560, debug=True)
