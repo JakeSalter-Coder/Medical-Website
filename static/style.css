@@ -22,7 +22,10 @@ body {
 }
 
 div {
+    width: 300px;
     display: inline-flex;
+    justify-content: space-between;
+    padding: 10px;
 }
 
 footer {

@@ -18,13 +18,17 @@
     </p>
     <form id="user_input">
         <div>
-            <label for="name">Full name:</label><br>
-            <input type="text" id="name" name="name">
-        </div>
+            <label for="first_name">First name:</label><br>
+            <input type="text" id="first_name" name="first_name">
+        </div><br>
+        <div>
+            <label for="last_name">Last name:</label>
+            <input type="text" id="last_name" name="last_name">
+        </div><br>
         <div>
             <label for="age">Age: </label><br>
             <input type="number" id="age" name="age">
-        </div>
+        </div><br>
         <div class="gender-select">
             <label>Gender:</label><br>
             <input type="radio" id="male" name="gender" value="male">
@@ -33,15 +37,15 @@
             <label for="female">Female</label>
             <input type="radio" id="other" name="gender" value="other">
             <label for="other">Other</label>
-        </div>
+        </div><br>
         <div>
             <label for="height">Height:</label><br>
             <input type="number" id="height" name="height">
-        </div>
+        </div><br>
         <div>
             <label for="weight">Weight:</label><br>
             <input type="number" id="weight" name="weight">
-        </div>
+        </div><br>
         <div>
             <label for="race">Race:</label><br>
             <select id="race" name="race">
@@ -49,7 +53,7 @@
                 <option value="asian">Asian</option>
                 <option value="black">Black or African American</option>
                 <option value="hawaiian">Native Hawaiian or Other Pacific Islander</option>
-                <option value="white">White</option>
+                <option value="white" selected="selected">White</option>
             </select>
         </div><br>
         <button onclick="submitButton()">Submit</button>
@@ -57,7 +61,7 @@
 </body>
 
 <footer>
-    <h2>Aaryan<br>Derek Credland<br>Ronald Montilla<br>William<br>Jake Salter<br></h2>
+    <h2>Derek Credland<br>Aaryan Lakhani<br>Ronald Montilla<br>Jake Salter<br>William Stutts<br></h2>
 </footer>
 
 </html>

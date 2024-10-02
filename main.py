@@ -1,26 +1,35 @@
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 
 app = Flask(__name__)
 
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', success=None)
 
 
-@app.route('/', methods=['POST'])
+@app.route('/submit', methods=['POST'])
 def index_post():
-    name = request.form['name']
-    age = request.form['age']
-    gender = request.form['gender']
-    height = request.form['height']
-    weight = request.form['weight']
-    race = request.form['race']
-    user_input = name + " " + age + " " + gender + " " + height + " " + weight + " " + race
-    print(user_input)
-    return '/'
+    data = request.get_json()
 
+    first_name = data.get('first_name')
+    last_name = data.get('last_name')
+    age = data.get('age')
+    gender = data.get('gender')
+    height = data.get('height')
+    weight = data.get('weight')
+    race = data.get('race')
+    user_input = first_name + " " + last_name + " " + age + " " + gender + " " + height + " " + weight + " " + race
+    print(user_input)
+    app.logger.info(user_input)
+
+    response = {
+        'status': 'success',
+        'message': 'Data received successfully',
+        'received_data': data
+    }
+    return jsonify(response)
 
 @app.route("/quit")
 def _quit():
