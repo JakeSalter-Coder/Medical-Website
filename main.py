@@ -1,8 +1,38 @@
 
 from flask import Flask, render_template, request, jsonify
+from flask_mysqldb import MySQL
 
 app = Flask(__name__)
 
+app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = 'Abacab#2024'
+app.config['MYSQL_DB'] = 'BOOKS_DB'
+app.config['MYSQL_PORT'] = 3306
+
+mysql = MySQL(app)
+
+def connect():
+    try:
+        # Create a cursor object
+        conn = mysql.connection
+        if conn == None:
+            print("Issue with connection")
+        cur = conn.cursor()
+        
+        # Insert data into the database
+        cur.execute("INSERT INTO MyUsers(firstName, lastName) VALUES (%s, %s)", ('Derek', 'Credland'))
+        
+        # Commit changes
+        conn.commit()
+
+    except Exception as e:
+        print(f"Error: {e}")
+
+    finally:
+        # Close the cursor
+        cur.close()
+        conn.close()
 
 @app.route('/')
 def index():
@@ -24,6 +54,8 @@ def index_post():
     print(user_input)
     app.logger.info(user_input)
 
+    connect()
+    
     response = {
         'status': 'success',
         'message': 'Data received successfully',
