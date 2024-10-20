@@ -1,4 +1,8 @@
-function submitButton(){
+window.addEventListener("load", function() {
+    let submit_button = document.getElementById("user_input")
+
+submit_button.addEventListener("submit", (e) => {
+    e.preventDefault();
 
     let user_first_name = document.getElementById("first_name").value;
     let user_last_name = document.getElementById("last_name").value;
@@ -15,8 +19,6 @@ function submitButton(){
     let user_weight = document.getElementById("weight").value;
     let user_race = document.getElementById("race").value;
 
-    let errorMessage = document.getElementById("error_message");
-
     if(user_first_name && user_last_name && user_age && user_gender && user_height && user_weight && user_race) {
         $.ajax({
             url: '/submit',
@@ -31,12 +33,15 @@ function submitButton(){
                 weight: user_weight,
                 race: user_race
             }),
-            success: function(response){
+            success: function(){
                 alert('Data submit successfully: ' + JSON.stringify(response));
             },
-            error: function(error){
-                alert('Error submitting data: ' + error);
+            error: function(){
+                alert('Error submitting data: ');
             }
         });
+    } else {
+        alert('Incorrect Input!');
     }
-}
+})
+})
