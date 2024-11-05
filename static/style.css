@@ -22,7 +22,7 @@ body {
 }
 
 div {
-    width: 300px;
+    width: 400px;
     display: inline-flex;
     justify-content: space-between;
     padding: 10px;
@@ -36,4 +36,29 @@ footer {
 
 footer h2 {
     color: #FFEED8;
+}
+
+.height {
+  width: 50px;
+}
+
+#race {
+    width: 150px;
+}
+
+input {
+    width: 150px;
+}
+
+#disease-select {
+    display: inline-block;
+}
+
+#consent {
+    display: flex;
+    font-size: 15px;
+}
+
+#consent-checkbox {
+    height: 10px;
 }
