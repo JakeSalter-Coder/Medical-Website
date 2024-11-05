@@ -56,6 +56,14 @@
                 <option value="white" selected="selected">White</option>
             </select>
         </div><br>
+        <div>
+            <label for="disease">Have you ever been diagnosed with any of the following</label>
+            <select id="disease" name="disease">
+                { % for disease in diseases  %}
+                <option value="{{  disease }}"> {{ disease }}</option>
+                {%  endfor %}
+            </select>
+        </div>
         <button type="submit">Submit</button>
     </form>
 </body>

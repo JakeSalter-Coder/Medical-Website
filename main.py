@@ -25,18 +25,21 @@ def connect():
         
         # Commit changes
         conn.commit()
+        cur.close()
+        conn.close()
 
     except Exception as e:
         print(f"Error: {e}")
 
-    finally:
-        # Close the cursor
-        cur.close()
-        conn.close()
 
 @app.route('/')
 def index():
-    return render_template('index.html', success=None)
+    connc = mysql.connection
+    if connc == None:
+        print("Issue with connection")
+    cur = connc.cursor()
+    currently_logged_diseases = cur.execute("SELECT DISTINC disease_name FROM DISEASE")
+    return render_template('index.html', )
 
 
 @app.route('/submit', methods=['POST'])
