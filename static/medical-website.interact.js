@@ -7,11 +7,11 @@ jQuery(document).ready(function(){
         let user_age = jQuery('#age').val();
         let user_gender;
         if(document.getElementById("male").checked){
-            user_gender = "male";
+            user_gender = "Male";
         } else if(document.getElementById("female").checked){
-            user_gender = "female";
+            user_gender = "Female";
         } else{
-            user_gender = "other";
+            user_gender = "Other";
         }
         let user_height_ft = jQuery('#height_ft').val();
         user_height_ft = parseInt(user_height_ft, 10);
@@ -28,7 +28,7 @@ jQuery(document).ready(function(){
             user_consent = 0;
         }
         if(user_first_name && user_last_name && user_age && user_gender && user_height_ft && user_height_in && user_weight && user_race) {
-            $.ajax({
+            jQuery.ajax({
                 url: '/submit',
                 type: 'POST',
                 contentType: 'application/json',
@@ -45,7 +45,7 @@ jQuery(document).ready(function(){
                     consent: user_consent
                 }),
                 success: function(response){
-                    alert('Data submit successfully: ' + JSON.stringify(response));
+                    jQuery('#prediction').text(response.prediction);
                 },
                 error: function(){
                     alert('Error submitting data: ');
