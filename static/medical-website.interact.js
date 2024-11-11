@@ -58,7 +58,7 @@ jQuery(document).ready(function(){
 
     jQuery('#disease').on('change', function(){
         let selectedValue = jQuery(this).val();
-        if(selectedValue !== "None"){
+        if(selectedValue !== "Healthy"){
             if(jQuery('#consent-checkbox').length == 0){
                 jQuery('#consent').append (
                     '<input type="checkbox" id="consent-checkbox" style="flex 0 0 auto;"/>' +

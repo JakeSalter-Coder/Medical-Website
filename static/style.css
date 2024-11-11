@@ -10,11 +10,6 @@ header h1, aside {
     color: #FFEED8;
 }
 
-form {
-    width: 100%;
-    height: 600px;
-}
-
 body {
     min-height: 100vh;
     display: flex;
@@ -22,7 +17,7 @@ body {
 }
 
 div {
-    width: 400px;
+    width: 300px;
     display: inline-flex;
     justify-content: space-between;
     padding: 10px;

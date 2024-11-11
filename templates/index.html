@@ -2,7 +2,7 @@
 <html lang = "en">
 <head>
     <meta charset="UTF-8">
-    <title>MEDICAL!!MEDICAL!!MEDICAL</title>
+    <title>Medical ;)</title>
 </head>
 
 <body>
@@ -13,25 +13,25 @@
         <script src="{{ url_for('static', filename='jquery-3.7.1.min.js') }}"></script>
         <script src="{{ url_for('static', filename='medical-website.interact.js') }}"></script>
     </header>
-    <p>
+    <h2>
         Please enter your information in order to determine which diseases you may be at risk for!
-    </p>
+    </h2>
     <form action="" id="user_input">
         <div>
             <label for="first_name">First name:</label>
-            <input type="text" id="first_name" name="first_name">
+            <input type="text" id="first_name" name="first_name" pattern="^\S+$" required>
         </div><br>
         <div>
             <label for="last_name">Last name:</label>
-            <input type="text" id="last_name" name="last_name">
+            <input type="text" id="last_name" name="last_name" pattern="^\S+$" required>
         </div><br>
         <div>
             <label for="age">Age: </label>
-            <input type="number" id="age" name="age">
+            <input type="number" id="age" name="age" max="120" min="0" required>
         </div><br>
         <div class="gender-select">
             <label>Gender:</label>
-            <input type="radio" id="male" name="gender" value="male">
+            <input type="radio" id="male" name="gender" value="male" required>
             <label for="male">Male</label>
             <input type="radio" id="female" name="gender" value="female">
             <label for="female">Female</label>
@@ -40,14 +40,14 @@
         </div><br>
         <div>
             <label>Height:</label>
-            <input type="number" id="height_ft" name="height_ft" class="height" max="7" min="0">
+            <input type="number" id="height_ft" name="height_ft" class="height" max="7" min="0" required>
             <label for="height_ft">ft</label>
-            <input type="number" id="height_in" name="height_in" class="height" max="12" min="0">
+            <input type="number" id="height_in" name="height_in" class="height" max="12" min="0" required>
             <label for="height_in">in</label>
         </div><br>
         <div>
             <label for="weight">Weight (lbs):</label>
-            <input type="number" id="weight" name="weight" step="0.1" max="600" min="0">
+            <input type="number" id="weight" name="weight" step="0.1" max="600" min="0" required>
         </div><br>
         <div>
             <label for="race">Race:</label>
@@ -62,16 +62,19 @@
         <div id="disease-select">
             <label for="disease">Have you ever been diagnosed with any of the following...</label>
             <select id="disease" name="disease">
-                <option value="None" selected="selected">None</option>
                 {% for disease in diseases %}
-                <option value="{{  disease }}"> {{ disease }}</option>
+                    {%  if disease == "Healthy" %}
+                        <option value="{{  disease }}" selected="selected"> {{ disease }}</option>
+                    {% else %}
+                        <option value="{{  disease }}"> {{ disease }}</option>
+                    {%  endif %}
                 {% endfor %}
             </select>
         </div><br>
         <div id="consent"></div><br>
         <button type="submit">Submit</button>
     </form>
-    <h1>Based on your demographic information, you are most at risk for:</h1>
+    <h3>Based on your demographic information, you are most at risk for:</h3>
     <p id="prediction"></p>
 </body>
 
