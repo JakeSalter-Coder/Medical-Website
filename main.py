@@ -4,8 +4,6 @@ import pandas as pd
 import numpy as np
 from flask import Flask, render_template, request, jsonify
 from flask_mysqldb import MySQL
-
-from sqlandpythoncode.patientgenerator1 import patient
 from utils.model import train_model
 
 app = Flask(__name__)
