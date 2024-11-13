@@ -18,14 +18,14 @@ app.config['MYSQL_CONNECT_TIMEOUT'] = 60
 mysql = MySQL(app)
 
 disease_recs = {
-    "Hypertension": "https://www.cdc.gov/high-blood-pressure/about/index.html%E2%80%8B",
-    "Diabetes": "https://www.cdc.gov/diabetes/about/index.html%E2%80%8B",
-    "Heart Disease": "https://www.cdc.gov/heart-disease/about/index.html%E2%80%8B",
-    "Asthma": "https://www.cdc.gov/asthma/about/index.html%E2%80%8B",
-    "Cancer": "https://www.cdc.gov/cancer/index.html%E2%80%8B",
-    "Depression": "https://www.who.int/news-room/fact-sheets/detail/depression%E2%80%8B",
-    "Arthritis": "https://www.cdc.gov/arthritis/index.html%E2%80%8B",
-    "Chronic Kidney Disease": "https://www.cdc.gov/kidney-disease/index.html%E2%80%8B",
+    "Hypertension": "https://www.cdc.gov/high-blood-pressure/about/index.html",
+    "Diabetes": "https://www.cdc.gov/diabetes/about/index.html",
+    "Heart Disease": "https://www.cdc.gov/heart-disease/about/index.html",
+    "Asthma": "https://www.cdc.gov/asthma/about/index.html",
+    "Cancer": "https://www.cdc.gov/cancer/index.html",
+    "Depression": "https://www.who.int/news-room/fact-sheets/detail/depression",
+    "Arthritis": "https://www.cdc.gov/arthritis/index.html",
+    "Chronic Kidney Disease": "https://www.cdc.gov/kidney-disease/index.html",
     "Anxiety": "https://medlineplus.gov/anxiety.html#:~:text=Anxiety%20is%20a%20feeling%20of,before%20making%20an%20important%20decision"
 }
 
@@ -111,11 +111,11 @@ def get_model():
 
 # Train and return the Random Forest model for predictions
 with app.app_context():
-    print("Loading model")
+    print("Loading model...")
     try:
         model = joblib.load("models/rf_model.pkl")
     except FileNotFoundError:
-        print("Model not found.\nFitting model...")
+        print("Model not found.\nFitting new model...")
         model = get_model()
         print("Model trained.")
     print("Model loaded.")
