@@ -1,6 +1,8 @@
 import random
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 # Define lists of names and attributes
 first_names_male = [
@@ -37,7 +39,6 @@ first_names_female = [
     "Jasmine", "Charlie", "Amaya", "Taylor", "Isabel", "Ashley", "Khloe", "Ryleigh", "Alexa", "Amara",
     "Valeria", "Andrea", "Parker", "Norah", "Eden", "Elliana", "Brianna", "Emersyn", "Valerie", "Anastasia"
 ]
-
 last_names = [
     "Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis", "Rodriguez", "Martinez",
     "Hernandez", "Lopez", "Gonzalez", "Wilson", "Anderson", "Thomas", "Taylor", "Moore", "Jackson", "Martin",
@@ -88,162 +89,120 @@ last_names = [
     "Wu", "Hines", "Mullins", "Castaneda", "Malone", "Cannon", "Tate", "Mack", "Sherman", "Hubbard"
 ]
 
-races = ["White", "Black", "Asian", "Hispanic"]
+# Define lists of names and attributes
+races = ["White", "Black", "Asian", "Native American"]
+race_map = {race: i for i, race in enumerate(races)}  
 genders = ["Male", "Female"]
+lifestyles = ["Smoker", "Non-Smoker", "Active", "Sedentary"]
+lifestyle_map = {lifestyle: i for i, lifestyle in enumerate(lifestyles)}
 
+# Function to calculate BMI
+def calculate_bmi(weight_lbs, height_inches):
+    return (weight_lbs / (height_inches ** 2)) * 703
+
+# Generate synthetic patient data
 def generate_patient(patient_id):
     gender = random.choice(genders)
     if gender == "Male":
         first_name = random.choice(first_names_male)
         weight = random.uniform(130, 265)  # lbs
         height = random.uniform(64, 79)    # inches
+        #gender_id = 1
     else:
         first_name = random.choice(first_names_female)
         weight = random.uniform(110, 220)  # lbs
         height = random.uniform(59, 71)    # inches
+        #gender_id = 0
     last_name = random.choice(last_names)
     race = random.choice(races)
+    #race_id = race_map[race]
+    age = random.randint(18, 90)  # Added Age
+    lifestyle = random.choice(lifestyles)
+    #lifestyle_id = lifestyle_map[lifestyle]
     return {
         'Patient ID': patient_id,
-        'First Name': first_name,
-        'Last Name': last_name,
+        'First_Name': first_name,
+        'Last_Name': last_name,
         'Gender': gender,
         'Race': race,
+        'Age': age,
         'Weight (lbs)': round(weight, 2),
-        'Height (inches)': round(height, 2)
+        'Height (inches)': round(height, 2),
+        'Lifestyle': lifestyle
     }
 
-# Function to convert inches to feet and inches
-def inches_to_feet_inches(height_inches):
-    feet = int(height_inches // 12)
-    inches = height_inches % 12
-    return f"{feet} ft {inches:.1f} in"
-
-# Function to calculate BMI
-def calculate_bmi(weight_lbs, height_inches):
-    bmi = (weight_lbs / (height_inches ** 2)) * 703
-    return bmi
-
-# Disease probability functions
+# Adjusted disease probability functions
 def hypertension_probability(patient):
-    prob = 0.15
+    prob = 0.10
     bmi = calculate_bmi(patient['Weight (lbs)'], patient['Height (inches)'])
     if bmi > 25:
         prob += 0.01 * (bmi - 25)
-    if patient['Gender'] == 'Male':
+    if patient['Gender'] == 1:  # Male
+        prob += 0.03
+    if patient['Age'] > 50:
         prob += 0.05
-    if patient['Race'] == 'Black':
-        prob += 0.05
-    prob = min(max(prob, 0), 1)
-    return prob
+    if patient['Lifestyle'] == 0:  # Smoker
+        prob += 0.02
+    return min(max(prob, 0), 1)
 
 def diabetes_probability(patient):
-    prob = 0.10
+    prob = 0.08
     bmi = calculate_bmi(patient['Weight (lbs)'], patient['Height (inches)'])
     if bmi > 30:
         prob += 0.02 * (bmi - 30)
-    if patient['Race'] in ['Black', 'Hispanic']:
+    if patient['Age'] > 45:
+        prob += 0.04
+    if patient['Lifestyle'] == 3:  # Sedentary
         prob += 0.03
-    prob = min(max(prob, 0), 1)
-    return prob
+    return min(max(prob, 0), 1)
 
 def heart_disease_probability(patient):
-    prob = 0.08
+    prob = 0.07
     bmi = calculate_bmi(patient['Weight (lbs)'], patient['Height (inches)'])
     if bmi > 25:
         prob += 0.01 * (bmi - 25)
-    if patient['Gender'] == 'Male':
-        prob += 0.05
-    if patient['Race'] == 'White':
-        prob += 0.02
-    prob = min(max(prob, 0), 1)
-    return prob
+    if patient['Age'] > 50:
+        prob += 0.04
+    if patient['Lifestyle'] == 0:  # Smoker
+        prob += 0.03
+    return min(max(prob, 0), 1)
 
 def asthma_probability(patient):
     prob = 0.05
-    if patient['Race'] == 'Black':
+    if patient['Race'] == race_map['Black']:
         prob += 0.03
-    if patient['Gender'] == 'Female':
+    if patient['Lifestyle'] == 0:  # Smoker
         prob += 0.02
-    prob = min(max(prob, 0), 1)
-    return prob
+    return min(max(prob, 0), 1)
 
 def cancer_probability(patient):
     prob = 0.05
     bmi = calculate_bmi(patient['Weight (lbs)'], patient['Height (inches)'])
     if bmi > 30:
         prob += 0.01 * (bmi - 30)
-    if patient['Gender'] == 'Male':
-        prob += 0.02
-    if patient['Race'] == 'White':
-        prob += 0.01
-    prob = min(max(prob, 0), 1)
-    return prob
-
-def depression_probability(patient):
-    prob = 0.07
-    if patient['Gender'] == 'Female':
+    if patient['Age'] > 60:
         prob += 0.03
-    if patient['Race'] == 'White':
-        prob += 0.02
-    prob = min(max(prob, 0), 1)
-    return prob
-
-def arthritis_probability(patient):
-    prob = 0.15  # Adjusted base probability
-    bmi = calculate_bmi(patient['Weight (lbs)'], patient['Height (inches)'])
-    if bmi > 30:
-        prob += 0.02 * (bmi - 30)
-    if patient['Gender'] == 'Female':
-        prob += 0.02
-    prob = min(max(prob, 0), 1)
-    return prob
-
-def ckd_probability(patient): #Chronic Kidney Disease
-    prob = 0.15
-    bmi = calculate_bmi(patient['Weight (lbs)'], patient['Height (inches)'])
-    if bmi > 30:
-        prob += 0.02 * (bmi - 30)
-    if patient['Race'] in ['Black', 'Hispanic']:
-        prob += 0.03
-    prob = min(max(prob, 0), 1)
-    return prob
+    return min(max(prob, 0), 1)
 
 def anxiety_probability(patient):
-    prob = 0.19
-    if patient['Gender'] == 'Female':
-        prob += 0.05
-    if patient['Race'] == 'White':
+    prob = 0.15
+    if patient['Lifestyle'] == 3:  # Sedentary
         prob += 0.03
-    prob = min(max(prob, 0), 1)
-    return prob
+    return min(max(prob, 0), 1)
 
-#Diseases dict
-Disease_dict = {'Hypertension': 1, 'Diabetes': 2, 'Heart Disease': 3, 'Asthma': 4, 'Cancer': 5,
-        'Depression': 6, 'Arthritis': 7, 'Chronic Kidney Disease': 8, 'Anxiety': 9, 'Healthy': 10}
-
-
-# Function to assign disease
 def assign_disease(patient):
-    diseases = [
-        'Hypertension', 'Diabetes', 'Heart Disease', 'Asthma', 'Cancer',
-        'Depression', 'Arthritis', 'Chronic Kidney Disease', 'Anxiety', 'Healthy'
-    ]
+    diseases = ['Hypertension', 'Diabetes', 'Heart Disease', 'Asthma', 'Cancer', 'Anxiety', 'Healthy']
     probabilities = [
         hypertension_probability(patient),
         diabetes_probability(patient),
         heart_disease_probability(patient),
         asthma_probability(patient),
         cancer_probability(patient),
-        depression_probability(patient),
-        arthritis_probability(patient),
-        ckd_probability(patient),
         anxiety_probability(patient)
     ]
     prob_healthy = 1 - sum(probabilities)
     prob_healthy = max(prob_healthy, 0)
     probabilities.append(prob_healthy)
-    # Normalize probabilities
     total_prob = sum(probabilities)
     probabilities = [p / total_prob for p in probabilities]
     disease = random.choices(diseases, weights=probabilities, k=1)[0]
@@ -254,33 +213,40 @@ num_patients = 10000
 patient_list = []
 
 for i in range(1, num_patients + 1):
-    patient_id = "synth_"+ str(i)
+    patient_id = "synth_" + str(i)
     patient = generate_patient(patient_id)
     patient['Disease'] = assign_disease(patient)
-    # Assign obesity based on BMI
     bmi = calculate_bmi(patient['Weight (lbs)'], patient['Height (inches)'])
-    patient['Obesity'] = 1 if bmi >= 30 else 0
+    patient['Obesity'] = 'yes' if bmi >= 30 else 'no'
     patient_list.append(patient)
 
 # Create DataFrame
 df = pd.DataFrame(patient_list)
 
-# Convert the Disease_dict to a DataFrame
-df_disease_dict = pd.DataFrame(list(Disease_dict.items()), columns=['Disease', 'Disease ID'])
+# Convert Disease names to IDs
+#Disease_dict = {
+#    'Hypertension': 1, 'Diabetes': 2, 'Heart Disease': 3, 'Asthma': 4,
+#    'Cancer': 5, 'Anxiety': 6, 'Healthy': 7
+#}
+#df['Disease ID'] = df['Disease'].map(Disease_dict)
 
-# Add 'Height' column in ft and inches
-df['Height'] = df['Height (inches)'].apply(inches_to_feet_inches)
+# Finalize DataFrame with only numeric columns
+df = df[['Patient ID','First_Name', 'Last_Name', 'Gender', 'Race', 'Age', 'Weight (lbs)', 'Height (inches)',
+         'Lifestyle', 'Obesity', 'Disease']]
 
-#Add Disease id to the column
-df['Disease ID'] = df['Disease'].map(Disease_dict)
+# Check distribution of diseases
+#disease_counts = df['Disease ID'].value_counts(normalize=True) * 100
+#print("Disease Distribution (%):")
+#print(disease_counts)
 
-# Rearrange columns
-df = df[['Patient ID', 'First Name', 'Last Name', 'Race', 'Weight (lbs)', 'Height', 'Gender', 'Obesity', 'Disease ID']]
+# Plot the distribution
+#plt.figure(figsize=(10, 6))
+#sns.barplot(x=disease_counts.index, y=disease_counts.values)
+#plt.xlabel('Disease ID')
+#plt.ylabel('Percentage')
+#plt.title('Distribution of Disease IDs in Generated Data')
+#plt.show()
 
-# Save the DataFrames to a CSV file
+# Save DataFrame to CSV
 df.to_csv('patients.csv', index=False)
-df_disease_dict.to_csv('disease_dict.csv', index=False)
-
-# Display the Data Frames
-print(df)
-print(df_disease_dict)
+print("Generated dataset saved to 'patients1.csv'")

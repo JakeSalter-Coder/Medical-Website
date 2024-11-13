@@ -3,6 +3,7 @@ import pandas as pd
 import joblib
 from flask import Flask, render_template, request, jsonify
 from flask_mysqldb import MySQL
+
 from utils.model import train_model
 
 app = Flask(__name__)
@@ -66,7 +67,7 @@ def insert_new_patients(user_input):
             INSERT INTO User_Information(Patient_ID, First_name, Last_name, 
                                          Race, Weight, Height, 
                                          Gender, Obesity, Disease_ID,
-                                         Age, Lifetsyle) 
+                                         Age, Lifestyle) 
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """
         cur.execute(insert, values)
@@ -93,18 +94,18 @@ def get_model():
 
     # Gets all user information in the database to fit Random Forest
     cur.execute("""
-        SELECT Race,Weight,Gender,Obesity, Disease_ID FROM Synthetic_data
+        SELECT Race,Weight,Gender,Obesity,Age,Lifestyle,Disease_ID FROM Synthetic_data
         UNION 
-        SELECT Race,Weight,Gender,Obesity, Disease_ID FROM User_Information
+        SELECT Race,Weight,Gender,Obesity,Age,Lifestyle,Disease_ID FROM User_Information
         """)
 
     # Build dataframes for fitting
-    patient_data = pd.DataFrame(cur.fetchall(), columns=["race", "weight", "gender", "obesity", "disease_id", "Lifestyle","Age"])
+    patient_data = pd.DataFrame(cur.fetchall(), columns=["race", "weight", "gender", "obesity", "age","lifestyle","disease_id", ])
     disease_data = patient_data["disease_id"]
     patient_data = patient_data.iloc[::, :-1]
     patient_data["gender"] = patient_data["gender"].map({'Male':0, 'Female':1})
     patient_data["race"] = patient_data["race"].map({'White':0, 'Black':1, 'Asian':2, 'Hispanic':3})
-     patient_data["Lifestyle"] = patient_data["Lifestyle"].map({'Smoker':0, 'Non-Smoker':1, 'Active':2, 'Sedentary':3})
+    patient_data["lifestyle"] = patient_data["lifestyle"].map({'Sedentary':0, 'Active':1, 'Smoker':2, 'Non-Smoker':3})
 
     return train_model(patient_data, disease_data)
 
@@ -177,15 +178,15 @@ def index_post():
         user_gender_index = 1
 
     # Convert string Lifestyle into int index
-    user_Lifestyle_index = -1
-    if user_input["Lifestyle"] == "Smoker":
-        user_Lifestyle_index = 0
-    elif user_input["Lifestyle"] == "Non-Smoker":
-        user_Lifestyle_index = 1
-    elif user_input["Lifestyle"] == "Active":
-        user_Lifestyle_index = 2
-    elif user_input["Lifestyle"] == "Sedentary":
-        user_Lifestyle_index = 3
+    user_lifestyle_index = -1
+    if user_input["lifestyle"] == "Sedentary":
+        user_lifestyle_index = 0
+    elif user_input["lifestyle"] == "Active":
+        user_lifestyle_index = 1
+    elif user_input["lifestyle"] == "Smoker":
+        user_lifestyle_index = 2
+    elif user_input["lifestyle"] == "Non-Smoker":
+        user_lifestyle_index = 3
     
     # Build dataframe from user data
     user_data = pd.DataFrame({
@@ -193,7 +194,8 @@ def index_post():
         'weight': [user_input["weight"]],
         'gender': [user_gender_index],
         'obesity': [check_obese(user_input["height"], user_input["weight"])],
-        'Lifestyle': [user_Lifestyle_index]
+        'age': [user_input["age"]],
+        'lifestyle': [user_lifestyle_index]
     })
 
     # Prediction from model based on user data
