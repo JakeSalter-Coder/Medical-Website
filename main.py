@@ -100,11 +100,13 @@ def get_model():
         """)
 
     # Build dataframes for fitting
-    patient_data = pd.DataFrame(cur.fetchall(), columns=["race", "weight", "gender", "obesity", "age","lifestyle","disease_id", ])
+    patient_data = pd.DataFrame(cur.fetchall(), columns=["race", "weight", "gender",
+                                                         "obesity", "age","lifestyle",
+                                                         "disease_id", ])
     disease_data = patient_data["disease_id"]
     patient_data = patient_data.iloc[::, :-1]
     patient_data["gender"] = patient_data["gender"].map({'Male':0, 'Female':1})
-    patient_data["race"] = patient_data["race"].map({'White':0, 'Black':1, 'Asian':2, 'Hispanic':3})
+    patient_data["race"] = patient_data["race"].map({'White':0, 'Black':1, 'Asian':2, 'Native American':3})
     patient_data["lifestyle"] = patient_data["lifestyle"].map({'Sedentary':0, 'Active':1, 'Smoker':2, 'Non-Smoker':3})
 
     return train_model(patient_data, disease_data)
@@ -167,7 +169,7 @@ def index_post():
         user_race_index = 1
     elif user_input["race"] == "Asian":
         user_race_index = 2
-    elif user_input["race"] == "Hispanic":
+    elif user_input["race"] == "Native American":
         user_race_index = 3
 
     # Convert string Gender into int index
