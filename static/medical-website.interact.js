@@ -45,7 +45,10 @@ jQuery(document).ready(function(){
                     consent: user_consent
                 }),
                 success: function(response){
+                    jQuery('#prediction-label').text("Based on your demographic information, you are most at risk for:");
                     jQuery('#prediction').text(response.prediction);
+                    jQuery('#rec').attr('href', response.rec);
+                    jQuery('#rec').text("Click here for recommendations on addressing " + response.prediction);
                 },
                 error: function(){
                     alert('Error submitting data: ');

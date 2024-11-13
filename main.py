@@ -1,7 +1,6 @@
-from operator import truediv
 
 import pandas as pd
-import numpy as np
+import joblib
 from flask import Flask, render_template, request, jsonify
 from flask_mysqldb import MySQL
 from utils.model import train_model
@@ -16,6 +15,19 @@ app.config['MYSQL_PORT'] = 3306
 app.config['MYSQL_CONNECT_TIMEOUT'] = 60
 
 mysql = MySQL(app)
+
+disease_recs = {
+    "Hypertension": "https://www.cdc.gov/high-blood-pressure/about/index.html%E2%80%8B",
+    "Diabetes": "https://www.cdc.gov/diabetes/about/index.html%E2%80%8B",
+    "Heart Disease": "https://www.cdc.gov/heart-disease/about/index.html%E2%80%8B",
+    "Asthma": "https://www.cdc.gov/asthma/about/index.html%E2%80%8B",
+    "Cancer": "https://www.cdc.gov/cancer/index.html%E2%80%8B",
+    "Depression": "https://www.who.int/news-room/fact-sheets/detail/depression%E2%80%8B",
+    "Arthritis": "https://www.cdc.gov/arthritis/index.html%E2%80%8B",
+    "Chronic Kidney Disease": "https://www.cdc.gov/kidney-disease/index.html%E2%80%8B",
+    "Anxiety": "https://medlineplus.gov/anxiety.html#:~:text=Anxiety%20is%20a%20feeling%20of,before%20making%20an%20important%20decision"
+}
+
 
 def insert_new_patients(user_input):
     try:
@@ -97,7 +109,14 @@ def get_model():
 
 # Train and return the Random Forest model for predictions
 with app.app_context():
-    model = get_model()
+    print("Loading model")
+    try:
+        model = joblib.load("models/rf_model.pkl")
+    except FileNotFoundError:
+        print("Model not found.\nFitting model...")
+        model = get_model()
+        print("Model trained.")
+    print("Model loaded.")
 
 @app.route('/')
 def index():
@@ -178,6 +197,7 @@ def index_post():
     response = {
         'status': 'success',
         'prediction': predicted_disease,
+        'rec': disease_recs[predicted_disease]
     }
     return jsonify(response)
 

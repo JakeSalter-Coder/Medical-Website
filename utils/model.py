@@ -1,8 +1,11 @@
-
-from sklearn.ensemble import RandomForestClassifier, HistGradientBoostingClassifier, VotingClassifier
-from sklearn.metrics import accuracy_score, confusion_matrix, precision_score, recall_score, ConfusionMatrixDisplay
+import matplotlib.pyplot as plt
+import seaborn as sns
+import joblib
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score
 from sklearn.model_selection import RandomizedSearchCV, train_test_split
 from scipy.stats import randint
+
 
 def train_model(x, y):
     X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.2)
@@ -27,17 +30,25 @@ def train_model(x, y):
     best_rf = tuned_forest.best_estimator_
     print("Best hyperparameters:", tuned_forest.best_params_)
 
-    # Adding HistGradientBoostingClassifier
-    gradient_boost = HistGradientBoostingClassifier()
-    gradient_boost.fit(X_train, y_train)
-
-    # VotingClassifier with best models
-    vote = VotingClassifier([('rf',best_rf), ('gb',gradient_boost)], voting='soft')
-    vote.fit(X_train, y_train)
-
     # Predict and review accuracy
-    y_pred = vote.predict(X_test)
+    y_pred = best_rf.predict(X_test)
     accuracy = accuracy_score(y_test, y_pred)
+
+    # Create visualizations of model
+    create_visualizations(best_rf, x)
+
     print(f"Accuracy: {accuracy}")
 
-    return vote
+    joblib.dump(best_rf, 'models/rf_model.pkl')
+
+    return best_rf
+
+def create_visualizations(model, x):
+    feature_importances = model.feature_importances_
+    plt.figure(figsize=(8, 6))
+    sns.barplot(x=feature_importances, y=x.columns)
+    plt.title('Feature Importance')
+    plt.xlabel('Importance')
+    plt.ylabel('Feature')
+    plt.savefig('static/images/feature_importance.png')
+    plt.close()

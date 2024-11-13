@@ -59,6 +59,14 @@
                 <option value="White" selected="selected">White</option>
             </select>
         </div><br>
+        <div id="lifestyle-select">
+            <label for="lifestyle">Which best describes you:</label>
+            <select id="lifestyle" name="lifestyle">
+                <option value="Smoker">Smoker</option>
+                <option value="Non-smoker">Non-Smoker</option>
+                <option value=""
+            </select>
+        </div>
         <div id="disease-select">
             <label for="disease">Have you ever been diagnosed with any of the following...</label>
             <select id="disease" name="disease">
@@ -74,8 +82,9 @@
         <div id="consent"></div><br>
         <button type="submit">Submit</button>
     </form>
-    <h3>Based on your demographic information, you are most at risk for:</h3>
+    <h3 id="prediction-label"></h3>
     <p id="prediction"></p>
+    <a id="rec"></a>
 </body>
 
 <footer>
