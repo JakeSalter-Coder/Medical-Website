@@ -48,26 +48,26 @@ def insert_new_patients(user_input):
         # Determines if the user is obese, based on height and weight
         is_obese = check_obese(user_input["height"], user_input["weight"])
 
-        # Converts height from inches to a formatted string in feet and inches (e.g., "5 ft 10 in").
-        formatted_height = user_input["height"]
-        formatted_height = f"{formatted_height // 12} ft {formatted_height % 12} in"
-
         # Concat values into a single list
         values = (patient_id,
                   user_input['first_name'],
                   user_input['last_name'],
                   user_input['race'],
                   user_input['weight'],
-                  formatted_height,
+                  user_input['height'],
                   user_input['gender'],
                   is_obese,
-                  disease_id)
+                  disease_id,
+                  user_input['age'],
+                  user_input['lifestyle'])
 
         # Insert data into the database
         insert = """
             INSERT INTO User_Information(Patient_ID, First_name, Last_name, 
-                                         Race, Weight, Height, Gender, Obesity, Disease_ID) 
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+                                         Race, Weight, Height, 
+                                         Gender, Obesity, Disease_ID,
+                                         Age, Lifetsyle) 
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """
         cur.execute(insert, values)
         conn.commit()
@@ -147,6 +147,7 @@ def index_post():
         "height": data.get('height_ft') * 12 + data.get('height_in'),
         "weight": data.get('weight'),
         "race": data.get('race'),
+        "lifestyle": data.get('lifestyle'),
         "disease": data.get('disease'),
         "consent": data.get('consent')
     }

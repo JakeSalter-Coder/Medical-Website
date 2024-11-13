@@ -21,13 +21,14 @@ jQuery(document).ready(function(){
         user_weight = parseFloat(user_weight);
         let user_race = jQuery('#race').val();
         let user_disease = jQuery('#disease').val()
+        let user_lifestyle = jQuery('#lifestyle').val()
         let user_consent
         if(jQuery('#consent-checkbox').length > 0) {
             user_consent = jQuery('#consent-checkbox').prop('checked');
         } else {
             user_consent = 0;
         }
-        if(user_first_name && user_last_name && user_age && user_gender && user_height_ft && user_height_in && user_weight && user_race) {
+        if(user_first_name && user_last_name && user_age && user_gender && user_height_ft && user_height_in && user_weight && user_race && user_lifestyle) {
             jQuery.ajax({
                 url: '/submit',
                 type: 'POST',
@@ -41,6 +42,7 @@ jQuery(document).ready(function(){
                     height_in: user_height_in,
                     weight: user_weight,
                     race: user_race,
+                    lifestyle: user_lifestyle,
                     disease: user_disease,
                     consent: user_consent
                 }),
