@@ -99,11 +99,12 @@ def get_model():
         """)
 
     # Build dataframes for fitting
-    patient_data = pd.DataFrame(cur.fetchall(), columns=["race", "weight", "gender", "obesity", "disease_id"])
+    patient_data = pd.DataFrame(cur.fetchall(), columns=["race", "weight", "gender", "obesity", "disease_id", "Lifestyle","Age"])
     disease_data = patient_data["disease_id"]
     patient_data = patient_data.iloc[::, :-1]
     patient_data["gender"] = patient_data["gender"].map({'Male':0, 'Female':1})
     patient_data["race"] = patient_data["race"].map({'White':0, 'Black':1, 'Asian':2, 'Hispanic':3})
+     patient_data["Lifestyle"] = patient_data["Lifestyle"].map({'Smoker':0, 'Non-Smoker':1, 'Active':2, 'Sedentary':3})
 
     return train_model(patient_data, disease_data)
 
@@ -175,12 +176,24 @@ def index_post():
     elif user_input["gender"] == "Female":
         user_gender_index = 1
 
+    # Convert string Lifestyle into int index
+    user_Lifestyle_index = -1
+    if user_input["Lifestyle"] == "Smoker":
+        user_Lifestyle_index = 0
+    elif user_input["Lifestyle"] == "Non-Smoker":
+        user_Lifestyle_index = 1
+    elif user_input["Lifestyle"] == "Active":
+        user_Lifestyle_index = 2
+    elif user_input["Lifestyle"] == "Sedentary":
+        user_Lifestyle_index = 3
+    
     # Build dataframe from user data
     user_data = pd.DataFrame({
         'race': [user_race_index],
         'weight': [user_input["weight"]],
         'gender': [user_gender_index],
-        'obesity': [check_obese(user_input["height"], user_input["weight"])]
+        'obesity': [check_obese(user_input["height"], user_input["weight"])],
+        'Lifestyle': [user_Lifestyle_index]
     })
 
     # Prediction from model based on user data
