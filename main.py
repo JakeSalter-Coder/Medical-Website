@@ -219,6 +219,11 @@ def index_post():
     }
     return jsonify(response)
 
+#For statistics page
+@app.route('/statistics')
+def statistics():
+    return render_template('statistics.html')
+    
 @app.route("/quit")
 def _quit():
     exit(0)
