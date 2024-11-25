@@ -57,3 +57,29 @@ input {
 #consent-checkbox {
     height: 10px;
 }
+
+/*For button to statistics page*/
+.button-class {
+    position: relative;
+    top: 55px;
+    display: inline-block;
+    padding: 10px 15px;
+    font-size: 16px;
+    color: white;
+    background-color: #007bff;
+    border: 1px solid #007bff;
+    border-radius: 4px; 
+    text-decoration: none; 
+    text-align: center;
+    cursor: pointer;
+}
+
+.button-class:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+.button-class:active {
+    background-color: #004085; 
+    border-color: #004085;
+}
