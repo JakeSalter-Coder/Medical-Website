@@ -28,7 +28,17 @@ jQuery(document).ready(function(){
         } else {
             user_consent = 0;
         }
-        if(user_first_name && user_last_name && user_age && user_gender && user_height_ft && user_height_in && user_weight && user_race && user_lifestyle) {
+        if( user_first_name &&
+            user_last_name &&
+            user_age &&
+            user_gender &&
+            user_height_ft !== null &&
+            user_height_ft !== undefined &&
+            user_height_in !== null &&
+            user_height_in !== undefined &&
+            user_weight &&
+            user_race &&
+            user_lifestyle) {
             jQuery.ajax({
                 url: '/submit',
                 type: 'POST',
