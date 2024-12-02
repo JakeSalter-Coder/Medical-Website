@@ -21,6 +21,9 @@ then, you can run the main file in your IDE, and connect to the website by openi
 
 This should open the Website.
 
+## Report
+The final report can be found at this overleaf link: https://www.overleaf.com/9798271824mcmzzhfqbtms#72e2ee
+
 ## Contributors
 - Aaryan Lakhani 
 - Derek Credland
