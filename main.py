@@ -10,7 +10,7 @@ app = Flask(__name__)
 
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'superpie1'
+app.config['MYSQL_PASSWORD'] = '1234'
 app.config['MYSQL_DB'] = 'Final_Project'
 app.config['MYSQL_PORT'] = 3306
 app.config['MYSQL_CONNECT_TIMEOUT'] = 60
@@ -124,22 +124,30 @@ with app.app_context():
 
 @app.route('/')
 def index():
+    return render_template('index.html')
+
+@app.route('/predictor.html', methods=['GET'])
+def predictor():
     # Connect to db
     conn = mysql.connection
     if conn is None:
         print("Issue with connection")
     cur = conn.cursor()
-
+    
     # Grab all logged diseases
     cur.execute("SELECT DISTINCT disease_name FROM Disease")
     currently_logged_diseases = cur.fetchall()
     currently_logged_diseases = [row[0] for row in currently_logged_diseases]
+    return render_template('predictor.html', diseases=currently_logged_diseases)
 
-    return render_template('index.html', diseases=currently_logged_diseases)
+@app.route('/statistics')
+def statistics():
+    return render_template('statistics.html')
+    
 
 
 @app.route('/submit', methods=['POST'])
-def index_post():
+def prediction_post():
     data = request.get_json()
 
     # Grab data from json object
@@ -219,11 +227,6 @@ def index_post():
     }
     return jsonify(response)
 
-#For statistics page
-@app.route('/statistics')
-def statistics():
-    return render_template('statistics.html')
-    
 @app.route("/quit")
 def _quit():
     exit(0)
